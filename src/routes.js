@@ -2,7 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import TrendingScreen from './screens/TrendingScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -16,7 +17,11 @@ const TabNavigator = createMaterialBottomTabNavigator(
         tabBarLabel: 'Perfil',
         tabBarIcon: ({tintColor}) => (
           <View>
-            <Icon style={[{color: tintColor}]} size={25} name={'md-person'} />
+            <MaterialIcon
+              style={[{color: tintColor}]}
+              size={25}
+              name={tintColor === '#6200EE' ? 'person' : 'person-outline'}
+            />
           </View>
         ),
       },
@@ -27,7 +32,11 @@ const TabNavigator = createMaterialBottomTabNavigator(
         tabBarLabel: 'Feed',
         tabBarIcon: ({tintColor}) => (
           <View>
-            <Icon style={[{color: tintColor}]} size={25} name={'md-list-box'} />
+            <MaterialCommunityIcon
+              style={[{color: tintColor}]}
+              size={25}
+              name={tintColor === '#6200EE' ? 'home' : 'home-outline'}
+            />
           </View>
         ),
       },
@@ -38,10 +47,10 @@ const TabNavigator = createMaterialBottomTabNavigator(
         tabBarLabel: 'Em alta',
         tabBarIcon: ({tintColor}) => (
           <View>
-            <Icon
+            <MaterialCommunityIcon
               style={[{color: tintColor}]}
               size={25}
-              name="md-trending-up"
+              name={tintColor === '#6200EE' ? 'compass' : 'compass-outline'}
             />
           </View>
         ),

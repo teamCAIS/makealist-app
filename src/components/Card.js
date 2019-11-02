@@ -1,12 +1,33 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
 import {Paragraph, Caption, Headline, Text, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-export default function Card() {
+export default function Card({cardStyle, list}) {
   const [expanded, setExpanded] = useState(false);
+  const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
   const [like, setLike] = useState(false);
+  const animatedHeight = expandAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [
+      list.data.length > 2 ? 230 : 200,
+      list.data.length > 2 ? (list.data.length + 4) * 50 : 260,
+    ],
+  });
+
+  const expandTransition = () => {
+    Animated.spring(expandAnimation, {toValue: 1}).start();
+  };
+
+  const closeTransition = () => {
+    Animated.spring(expandAnimation, {toValue: 0}).start();
+  };
+
+  useEffect(() => {
+    if (!expanded) closeTransition();
+    else expandTransition();
+  }, [expanded]);
 
   const _handlePress = () => {
     setExpanded(!expanded);
@@ -16,25 +37,44 @@ export default function Card() {
     setLike(!like);
   };
 
+  const _handleComment = () => {
+    return;
+  };
+
   return (
-    <View>
+    <Animated.View
+      style={[styles.container, {height: animatedHeight}, cardStyle]}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Avatar.Image
             size={24}
             source={{
-              uri: 'https://api.adorable.io/avatars/285/abott@adorable.png',
+              uri: list.user.profile_photo,
             }}
           />
-          <Paragraph style={styles.username}>Caio Nunes</Paragraph>
+          <Paragraph style={styles.username}>{list.user.name}</Paragraph>
         </View>
-        <Caption style={styles.date}>Há 13 dias</Caption>
+        <Caption style={styles.date}>{list.date}</Caption>
       </View>
-      <View style={styles.container}>
-        <Headline>Coisas que não aguento mais no semestre</Headline>
-        <Caption>Categoria: Ódio</Caption>
-        <Text style={styles.previewText}>10 - Aulas do Paulo...</Text>
-        <View style={styles.actionButtonsContainer}>
+      <Headline>{list.title}</Headline>
+      <Caption>Categoria: {list.category}</Caption>
+      <View>
+        {list.data.map((item, index) =>
+          index > 0 ? (
+            expanded ? (
+              <Text key={index} numberOfLines={3} style={styles.text}>{`${
+                item.order !== null ? item.order + ' - ' : '•'
+              } ${item.description}`}</Text>
+            ) : null
+          ) : (
+            <Text key={index} numberOfLines={3} style={styles.text}>{`${
+              item.order !== null ? item.order + ' - ' : '•'
+            } ${item.description}`}</Text>
+          ),
+        )}
+      </View>
+      <View style={styles.actionButtonsContainer}>
+        <View style={styles.buttonsBar}>
           <View style={styles.interactionsButtonsContainer}>
             <TouchableOpacity
               style={styles.button}
@@ -44,19 +84,31 @@ export default function Card() {
                 size={24}
                 color={like ? '#6200EE' : '#777'}
               />
+              <Caption>
+                {list.likes > 1000
+                  ? String(list.likes).substring(0, 1) + 'K'
+                  : list.likes}
+              </Caption>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
               onPress={() => _handleComment()}>
               <Icon name="comment-text" size={24} color="#777" />
+              <Caption>
+                {list.comments > 1000
+                  ? String(list.comments).substring(0, 1) + 'K'
+                  : list.comments}
+              </Caption>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity
+            hitSlop={{top: 150, left: 150, bottom: 150, right: 150}}
+            onPress={() => _handlePress()}>
             <Ionicon name="ios-arrow-down" size={24} color="#777" />
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -66,7 +118,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
     paddingTop: 8,
-    marginBottom: 16,
+    marginTop: 16,
     backgroundColor: '#FFF',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
@@ -78,36 +130,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#6200EE',
-    paddingHorizontal: 16,
     paddingVertical: 8,
   },
   avatarContainer: {
     flexDirection: 'row',
   },
   actionButtonsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 1,
+    backgroundColor: '#FFF',
+    width: 320,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   interactionsButtonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  buttonsBar: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   username: {
     marginLeft: 8,
-    color: '#FFF',
-  },
-  date: {
-    color: '#FFF',
   },
   button: {
+    flexDirection: 'row',
     marginRight: 16,
   },
-  previewText: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+  text: {
+    marginLeft: 16,
+    marginVertical: 16,
     color: '#777',
     fontSize: 16,
+    lineHeight: 24,
   },
 });
