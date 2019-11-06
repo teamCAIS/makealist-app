@@ -11,8 +11,9 @@ import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import TrendingScreen from './screens/TrendingScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import FeedScreen from './screens/FeedScreen';
+import AddListScreen from './screens/AddListScreen';
 
-const MainNavigation = createMaterialBottomTabNavigator(
+const TabNavigation = createMaterialBottomTabNavigator(
   {
     Profile: {
       screen: ProfileScreen,
@@ -66,6 +67,21 @@ const MainNavigation = createMaterialBottomTabNavigator(
     inactiveColor: '#777',
     barStyle: {backgroundColor: '#F8F8F8'},
     shifting: true,
+  },
+);
+
+const MainNavigation = createStackNavigator(
+  {
+    Main: {
+      screen: TabNavigation,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    AddList: AddListScreen,
+  },
+  {
+    initialRouteName: 'Main',
   },
 );
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import Card from '../Card';
 import {Caption} from 'react-native-paper';
@@ -84,24 +84,18 @@ export default function MyLists() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        nestedScrollEnabled={true}
-        keyExtractor={(item, index) => `card${index}`}
-        renderItem={({item, index}) =>
-          index !== data.length - 1 ? (
+      {data.map((item, index) =>
+        index !== data.length - 1 ? (
+          <Card key={`my-list-card-item${index}`} list={item} />
+        ) : (
+          <View key={`my-list-card-item${index}`}>
             <Card list={item} />
-          ) : (
-            <View>
-              <Card list={item} />
-              <Caption style={styles.noMoreListsText}>
-                Sem mais atualizações
-              </Caption>
-            </View>
-          )
-        }
-        showsVerticalScrollIndicator={false}
-      />
+            <Caption style={styles.noMoreListsText}>
+              Sem mais atualizações
+            </Caption>
+          </View>
+        ),
+      )}
     </View>
   );
 }

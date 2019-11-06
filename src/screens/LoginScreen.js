@@ -60,13 +60,15 @@ export default function LoginScreen({navigation}) {
       style={{flex: 1}}>
       <View style={styles.container}>
         <View>
-          <Image
-            source={{
-              uri:
-                'https://raw.githubusercontent.com/Rocketseat/semana-omnistack-9/master/mobile/src/assets/logo%403x.png',
-            }}
-            style={styles.logo}
-          />
+          <View style={styles.logoContainer}>
+            <Image
+              source={{
+                uri: 'https://i.ibb.co/HFYCYrn/24912.jpg',
+              }}
+              style={styles.logo}
+            />
+            <Caption style={styles.logoText}>Make A List</Caption>
+          </View>
           <TextInput
             label="Email"
             mode="outlined"
@@ -130,12 +132,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     justifyContent: 'space-around',
   },
+  logoContainer: {
+    marginBottom: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoText: {
+    marginTop: 8,
+    fontSize: 16,
+  },
   logo: {
     width: 100,
-    height: 88,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    marginBottom: 32,
+    height: 100,
+    borderRadius: 50,
+    resizeMode: 'cover',
   },
   textInput: {
     backgroundColor: 'white',

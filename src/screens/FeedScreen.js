@@ -4,7 +4,7 @@ import {FAB, Caption} from 'react-native-paper';
 
 import Card from '../components/Card';
 
-export default function FeedScreen() {
+export default function FeedScreen({navigation}) {
   const data = [
     {
       user: {
@@ -107,7 +107,12 @@ export default function FeedScreen() {
           }
           showsVerticalScrollIndicator={false}
         />
-        <FAB style={styles.fab} icon="playlist-plus" onPress={() => null} />
+        <FAB
+          style={styles.fab}
+          color="white"
+          icon="playlist-plus"
+          onPress={() => navigation.navigate('AddList')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -125,6 +130,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: '#F05A5B',
   },
   noMoreListsText: {
     marginVertical: 32,

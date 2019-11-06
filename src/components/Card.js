@@ -11,10 +11,11 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-export default function Card({cardStyle, list}) {
+export default function Card({cardStyle, list, favorite}) {
   const [expanded, setExpanded] = useState(false);
   const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
   const [like, setLike] = useState(false);
+  const [componentHeight, setComponentHeight] = useState(270);
   const animatedHeight = expandAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [
@@ -54,6 +55,10 @@ export default function Card({cardStyle, list}) {
 
   return (
     <Animated.View
+      onLayout={event => {
+        let {height} = event.nativeEvent.layout;
+        setComponentHeight(height);
+      }}
       style={[styles.container, {height: animatedHeight}, cardStyle]}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
@@ -123,7 +128,11 @@ export default function Card({cardStyle, list}) {
             <TouchableOpacity
               style={styles.button}
               onPress={() => handleFavorite()}>
-              <Icon name="star" size={22} color="#777" />
+              <Icon
+                name="star"
+                size={22}
+                color={favorite ? '#F05A5B' : '#777'}
+              />
             </TouchableOpacity>
           </View>
           <TouchableOpacity

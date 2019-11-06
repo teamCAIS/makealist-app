@@ -6,7 +6,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {Text, Caption, Divider} from 'react-native-paper';
+import {Text, Caption, Divider, FAB} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import MyLists from '../components/Profile/MyLists';
@@ -37,92 +37,102 @@ export default function ProfileScreen({navigation}) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerPhotoContainer}>
-          <View>
-            <TouchableOpacity>
-              <Image
-                style={styles.avatar}
-                source={{
-                  uri: 'https://api.adorable.io/avatars/285/caionunes.png',
-                }}
-              />
-            </TouchableOpacity>
-            <Text style={styles.username}>Caio Nunes</Text>
+    <View>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerPhotoContainer}>
+            <View>
+              <TouchableOpacity>
+                <Image
+                  style={styles.avatar}
+                  source={{
+                    uri: 'https://api.adorable.io/avatars/285/caionunes.png',
+                  }}
+                />
+              </TouchableOpacity>
+              <Text style={styles.username}>Caio Nunes</Text>
+            </View>
+            <View>
+              <TouchableOpacity onPress={() => handleLogout()}>
+                <Icon name="logout" size={24} color="white" />
+                <Caption style={{color: 'white'}}>Sair</Caption>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View>
-            <TouchableOpacity onPress={() => handleLogout()}>
-              <Icon name="logout" size={24} color="white" />
-              <Caption style={{color: 'white'}}>Sair</Caption>
+          <Divider style={{backgroundColor: 'white'}} />
+          <Text style={styles.bio} numberOfLines={2}>
+            Aqui fica a minha bio, eu vou aceitar no máximo duas linhas pra não
+            virar festa.
+          </Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="calendar-star" size={18} color="#fff" />
+            <Text style={styles.birthday}>Nascimento 27 de agosto de 1997</Text>
+          </View>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              onPress={() => handleTabChange(0)}
+              style={[
+                styles.tab,
+                activeComponent === 0
+                  ? {borderBottomWidth: 5, borderBottomColor: 'white'}
+                  : null,
+              ]}>
+              <Text
+                style={
+                  activeComponent == 0
+                    ? styles.activeTabText
+                    : styles.inactiveTabText
+                }>
+                Listas
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleTabChange(1)}
+              style={[
+                styles.tab,
+                activeComponent === 1
+                  ? {borderBottomWidth: 5, borderBottomColor: 'white'}
+                  : null,
+              ]}>
+              <Text
+                style={
+                  activeComponent == 1
+                    ? styles.activeTabText
+                    : styles.inactiveTabText
+                }>
+                Favoritos
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleTabChange(2)}
+              style={[
+                styles.tab,
+                activeComponent === 2
+                  ? {borderBottomWidth: 5, borderBottomColor: 'white'}
+                  : null,
+              ]}>
+              <Text
+                style={
+                  activeComponent == 2
+                    ? styles.activeTabText
+                    : styles.inactiveTabText
+                }>
+                Amigos
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <Divider style={{backgroundColor: 'white'}} />
-        <Text style={styles.bio} numberOfLines={2}>
-          Aqui fica a minha bio, eu vou aceitar no máximo duas linhas pra não
-          virar festa.
-        </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="calendar-star" size={18} color="#eee" />
-          <Text style={styles.birthday}>Nascimento 27 de agosto de 1997</Text>
-        </View>
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            onPress={() => handleTabChange(0)}
-            style={[
-              styles.tab,
-              activeComponent === 0
-                ? {borderBottomWidth: 5, borderBottomColor: 'white'}
-                : null,
-            ]}>
-            <Text
-              style={
-                activeComponent == 0
-                  ? styles.activeTabText
-                  : styles.inactiveTabText
-              }>
-              Listas
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleTabChange(1)}
-            style={[
-              styles.tab,
-              activeComponent === 1
-                ? {borderBottomWidth: 5, borderBottomColor: 'white'}
-                : null,
-            ]}>
-            <Text
-              style={
-                activeComponent == 1
-                  ? styles.activeTabText
-                  : styles.inactiveTabText
-              }>
-              Favoritos
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleTabChange(2)}
-            style={[
-              styles.tab,
-              activeComponent === 2
-                ? {borderBottomWidth: 5, borderBottomColor: 'white'}
-                : null,
-            ]}>
-            <Text
-              style={
-                activeComponent == 2
-                  ? styles.activeTabText
-                  : styles.inactiveTabText
-              }>
-              Pedidos
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>{handleComponentToShow()}</View>
-    </ScrollView>
+        <View>{handleComponentToShow()}</View>
+      </ScrollView>
+      {activeComponent === 0 ? (
+        <FAB
+          style={styles.fab}
+          color="white"
+          icon="playlist-plus"
+          onPress={() => navigation.navigate('AddList')}
+        />
+      ) : null}
+    </View>
   );
 }
 
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   birthday: {
-    color: '#eee',
+    color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
     marginLeft: 8,
@@ -189,6 +199,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   inactiveTabText: {
-    color: '#EEE',
+    color: 'white',
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    backgroundColor: '#F05A5B',
+    right: 0,
+    bottom: 0,
   },
 });
