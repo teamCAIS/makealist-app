@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
-import {Paragraph, Caption, Headline, Text, Avatar} from 'react-native-paper';
+import {
+  Paragraph,
+  Caption,
+  Headline,
+  Text,
+  Avatar,
+  Chip,
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
@@ -11,8 +18,8 @@ export default function Card({cardStyle, list}) {
   const animatedHeight = expandAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      list.data.length > 2 ? 230 : 200,
-      list.data.length > 2 ? (list.data.length + 4) * 50 : 260,
+      list.data.length > 2 ? 250 : 220,
+      list.data.length > 2 ? (list.data.length + 4) * 48 : 270,
     ],
   });
 
@@ -29,15 +36,19 @@ export default function Card({cardStyle, list}) {
     else expandTransition();
   }, [expanded]);
 
-  const _handlePress = () => {
+  const handlePress = () => {
     setExpanded(!expanded);
   };
 
-  const _handleLike = () => {
+  const handleLike = () => {
     setLike(!like);
   };
 
-  const _handleComment = () => {
+  const handleComment = () => {
+    return;
+  };
+
+  const handleFavorite = () => {
     return;
   };
 
@@ -57,18 +68,27 @@ export default function Card({cardStyle, list}) {
         <Caption style={styles.date}>{list.date}</Caption>
       </View>
       <Headline>{list.title}</Headline>
-      <Caption>Categoria: {list.category}</Caption>
+      <View style={{flexDirection: 'row'}}>
+        <Chip
+          icon={({size}) => <Icon name="label" size={size} color="#FFF" />}
+          onPress={() => null}
+          style={styles.chip}
+          textStyle={styles.chipText}>
+          {list.category}
+        </Chip>
+        <View />
+      </View>
       <View>
         {list.data.map((item, index) =>
           index > 0 ? (
             expanded ? (
               <Text key={index} numberOfLines={3} style={styles.text}>{`${
-                item.order !== null ? item.order + ' - ' : '•'
+                item.order !== null ? item.order + ' - ' : '• '
               } ${item.description}`}</Text>
             ) : null
           ) : (
             <Text key={index} numberOfLines={3} style={styles.text}>{`${
-              item.order !== null ? item.order + ' - ' : '•'
+              item.order !== null ? item.order + ' - ' : '• '
             } ${item.description}`}</Text>
           ),
         )}
@@ -78,13 +98,13 @@ export default function Card({cardStyle, list}) {
           <View style={styles.interactionsButtonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => _handleLike()}>
+              onPress={() => handleLike()}>
               <Icon
                 name="cards-heart"
-                size={24}
-                color={like ? '#6200EE' : '#777'}
+                size={22}
+                color={like ? '#F05A5B' : '#777'}
               />
-              <Caption>
+              <Caption style={styles.buttonNumber}>
                 {list.likes > 1000
                   ? String(list.likes).substring(0, 1) + 'K'
                   : list.likes}
@@ -92,19 +112,24 @@ export default function Card({cardStyle, list}) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => _handleComment()}>
-              <Icon name="comment-text" size={24} color="#777" />
-              <Caption>
+              onPress={() => handleComment()}>
+              <Icon name="comment-text" size={22} color="#777" />
+              <Caption style={styles.buttonNumber}>
                 {list.comments > 1000
                   ? String(list.comments).substring(0, 1) + 'K'
                   : list.comments}
               </Caption>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleFavorite()}>
+              <Icon name="star" size={22} color="#777" />
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             hitSlop={{top: 150, left: 150, bottom: 150, right: 150}}
-            onPress={() => _handlePress()}>
-            <Ionicon name="ios-arrow-down" size={24} color="#777" />
+            onPress={() => handlePress()}>
+            <Ionicon name="ios-arrow-down" size={22} color="#777" />
           </TouchableOpacity>
         </View>
       </View>
@@ -135,6 +160,13 @@ const styles = StyleSheet.create({
   avatarContainer: {
     flexDirection: 'row',
   },
+  chip: {
+    backgroundColor: '#F05A5B',
+    marginVertical: 8,
+  },
+  chipText: {
+    color: '#FFF',
+  },
   actionButtonsContainer: {
     position: 'absolute',
     bottom: 0,
@@ -159,13 +191,15 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    marginRight: 16,
+    marginRight: 4,
+  },
+  buttonNumber: {
+    marginHorizontal: 4,
   },
   text: {
     marginLeft: 16,
-    marginVertical: 16,
     color: '#777',
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 40,
   },
 });
