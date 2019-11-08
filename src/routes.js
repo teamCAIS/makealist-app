@@ -78,7 +78,10 @@ const MainNavigation = createStackNavigator(
         header: null,
       },
     },
-    AddList: AddListScreen,
+    AddList: {
+      screen: AddListScreen,
+      navigationOptions: AddListScreen.navigationOptions,
+    },
   },
   {
     initialRouteName: 'Main',
