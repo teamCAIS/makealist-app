@@ -111,7 +111,9 @@ export default function LoginScreen({navigation}) {
           </Button>
         </View>
         <View>
-          <TouchableOpacity onPress={() => null} style={styles.registerButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Register')}
+            style={styles.registerButton}>
             <Caption>Desejo me cadastrar</Caption>
           </TouchableOpacity>
         </View>
@@ -121,10 +123,6 @@ export default function LoginScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  backgroundContainer: {
-    width: '100%',
-    height: '100%',
-  },
   container: {
     width: '100%',
     height: '100%',

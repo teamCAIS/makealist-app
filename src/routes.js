@@ -6,8 +6,12 @@ import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+//Auth
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
+
+//App
 import TrendingScreen from './screens/TrendingScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import FeedScreen from './screens/FeedScreen';
@@ -93,6 +97,14 @@ const AuthNavigation = createStackNavigator({
     screen: LoginScreen,
     navigationOptions: {
       header: null,
+    },
+  },
+  Register: {
+    screen: RegisterScreen,
+    navigationOptions: {
+      title: 'Cadastro',
+      headerStyle: {backgroundColor: '#F05A5B'},
+      headerTintColor: 'white',
     },
   },
 });
