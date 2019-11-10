@@ -1,4 +1,4 @@
-package com.makealist;
+package com.teamcais.makealist;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

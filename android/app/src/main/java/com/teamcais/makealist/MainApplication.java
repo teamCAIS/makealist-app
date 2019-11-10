@@ -1,4 +1,4 @@
-package com.makealist;
+package com.teamcais.makealist;
 
 import android.app.Application;
 import android.content.Context;

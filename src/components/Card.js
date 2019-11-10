@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
 import {
   Paragraph,
   Caption,
@@ -107,7 +113,7 @@ export default function Card({cardStyle, list, favorite}) {
               <Icon
                 name="cards-heart"
                 size={22}
-                color={like ? '#F05A5B' : '#777'}
+                color={like ? '#512DA8' : '#757575'}
               />
               <Caption style={styles.buttonNumber}>
                 {list.likes > 1000
@@ -131,7 +137,7 @@ export default function Card({cardStyle, list, favorite}) {
               <Icon
                 name="star"
                 size={22}
-                color={favorite ? '#F05A5B' : '#777'}
+                color={favorite ? '#512DA8' : '#757575'}
               />
             </TouchableOpacity>
           </View>
@@ -170,7 +176,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   chip: {
-    backgroundColor: '#F05A5B',
+    backgroundColor: '#512DA8',
     marginVertical: 8,
   },
   chipText: {
@@ -207,7 +213,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 16,
-    color: '#777',
+    color: '#212121',
     fontSize: 16,
     lineHeight: 40,
   },

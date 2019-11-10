@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 270,
-    backgroundColor: '#F05A5B',
+    backgroundColor: '#512DA8',
     justifyContent: 'center',
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     margin: 16,
-    backgroundColor: '#F05A5B',
+    backgroundColor: '#512DA8',
     right: 0,
     bottom: 0,
   },

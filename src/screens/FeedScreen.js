@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#F05A5B',
+    backgroundColor: '#512DA8',
   },
   noMoreListsText: {
     marginVertical: 32,

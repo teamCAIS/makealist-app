@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
-import {Text, Searchbar} from 'react-native-paper';
+import {Text, Searchbar, FAB} from 'react-native-paper';
 import Card from '../components/Card';
 
-export default function TrendingScreen() {
+export default function TrendingScreen({navigation}) {
   const [query, setQuery] = useState('');
   const data = [
     {
@@ -41,6 +41,13 @@ export default function TrendingScreen() {
         renderItem={({item, index}) => <Card list={item} />}
         showsVerticalScrollIndicator={false}
       />
+
+      <FAB
+        style={styles.fab}
+        color="white"
+        icon="filter"
+        onPress={() => navigation.openDrawer()}
+      />
     </View>
   );
 }
@@ -52,5 +59,12 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    backgroundColor: '#512DA8',
+    right: 0,
+    bottom: 0,
   },
 });

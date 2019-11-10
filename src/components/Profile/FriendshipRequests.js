@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     marginVertical: 8,
-    color: '#777',
+    color: '#757575',
     fontSize: 18,
   },
   listContainer: {

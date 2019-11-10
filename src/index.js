@@ -4,6 +4,9 @@ import {
   Provider as PaperProvider,
   configureFonts,
 } from 'react-native-paper';
+import {Provider} from 'react-redux';
+import userReducer from './reducers/reducer';
+
 import Routes from './routes';
 
 const fontConfig = {
@@ -32,16 +35,18 @@ const theme = {
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#F05A5B',
-    accent: '#777',
+    primary: '#512DA8',
+    accent: '#757575',
   },
   fonts: configureFonts(fontConfig),
 };
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <Routes />
-    </PaperProvider>
+    <Provider store={userReducer}>
+      <PaperProvider theme={theme}>
+        <Routes />
+      </PaperProvider>
+    </Provider>
   );
 }

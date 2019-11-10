@@ -63,7 +63,7 @@ export default function LoginScreen({navigation}) {
           <View style={styles.logoContainer}>
             <Image
               source={{
-                uri: 'https://i.ibb.co/HFYCYrn/24912.jpg',
+                uri: 'https://i.ibb.co/BB6cjqs/20738.jpg',
               }}
               style={styles.logo}
             />
@@ -71,7 +71,7 @@ export default function LoginScreen({navigation}) {
           </View>
           <TextInput
             label="Email"
-            mode="outlined"
+            mode="flat"
             value={email}
             onFocus={() => setEmailError(false)}
             onChangeText={text => setEmail(text)}
@@ -82,7 +82,7 @@ export default function LoginScreen({navigation}) {
           </HelperText>
           <TextInput
             label="Senha"
-            mode="outlined"
+            mode="flat"
             value={password}
             secureTextEntry={!checked}
             onFocus={() => setPasswordError(false)}
@@ -96,7 +96,7 @@ export default function LoginScreen({navigation}) {
             <Checkbox.Android
               status={checked ? 'checked' : 'unchecked'}
               onPress={() => setChecked(!checked)}
-              color="#F05A5B"
+              color="#512DA8"
             />
             <TouchableOpacity onPress={() => setChecked(!checked)}>
               <Caption style={styles.checkboxText}>Mostrar a senha</Caption>
