@@ -18,22 +18,11 @@ import ConfigurationScreen from './screens/ConfigurationScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import FeedScreen from './screens/FeedScreen';
 import AddListScreen from './screens/AddListScreen';
+import CommentScreen from './screens/CommentScreen';
 
 //Drawers
 import FilterDrawer from './components/Drawer/FilterDrawer';
 import ListConfigurationDrawer from './components/Drawer/ListConfigurationDrawer';
-
-const TrendingNavigation = createDrawerNavigator(
-  {
-    Trending: {
-      screen: TrendingScreen,
-    },
-  },
-  {
-    contentComponent: FilterDrawer,
-    drawerPosition: 'right',
-  },
-);
 
 const AddListNavigation = createDrawerNavigator(
   {
@@ -80,7 +69,7 @@ const TabNavigation = createMaterialBottomTabNavigator(
       },
     },
     Trending: {
-      screen: TrendingNavigation,
+      screen: TrendingScreen,
       navigationOptions: {
         tabBarLabel: 'Em alta',
         tabBarIcon: ({tintColor}) => (
@@ -130,6 +119,14 @@ const MainNavigation = createStackNavigator(
     AddList: {
       screen: AddListNavigation,
       navigationOptions: AddListScreen.navigationOptions,
+    },
+    Comment: {
+      screen: CommentScreen,
+      navigationOptions: {
+        headerTintColor: 'white',
+        headerStyle: {backgroundColor: '#512DA8'},
+        title: 'Comentários',
+      },
     },
   },
   {

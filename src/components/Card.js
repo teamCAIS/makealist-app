@@ -17,7 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-export default function Card({cardStyle, list, favorite}) {
+export default function Card({cardStyle, list, favorite, navigation}) {
   const [expanded, setExpanded] = useState(false);
   const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
   const [like, setLike] = useState(false);
@@ -52,7 +52,7 @@ export default function Card({cardStyle, list, favorite}) {
   };
 
   const handleComment = () => {
-    return;
+    return navigation.navigate('Comment');
   };
 
   const handleFavorite = () => {

@@ -95,10 +95,10 @@ export default function FeedScreen({navigation}) {
           keyExtractor={(item, index) => `card${index}`}
           renderItem={({item, index}) =>
             index !== data.length - 1 ? (
-              <Card list={item} />
+              <Card list={item} navigation={navigation} />
             ) : (
               <View>
-                <Card list={item} />
+                <Card list={item} navigation={navigation} />
                 <Caption style={styles.noMoreListsText}>
                   Sem mais atualizações
                 </Caption>

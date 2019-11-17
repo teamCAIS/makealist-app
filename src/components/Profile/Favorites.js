@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {Caption} from 'react-native-paper';
 import Card from '../Card';
 
-export default function Favorites() {
+export default function Favorites({navigation}) {
   const data = [
     {
       user: {
@@ -80,10 +80,15 @@ export default function Favorites() {
     <View style={styles.container}>
       {data.map((item, index) =>
         index !== data.length - 1 ? (
-          <Card key={`my-list-card-item${index}`} list={item} favorite={true} />
+          <Card
+            key={`my-list-card-item${index}`}
+            list={item}
+            favorite={true}
+            navigation={navigation}
+          />
         ) : (
           <View key={`my-list-card-item${index}`}>
-            <Card list={item} favorite={true} />
+            <Card list={item} favorite={true} navigation={navigation} />
             <Caption style={styles.noMoreListsText}>
               Sem mais atualizações
             </Caption>

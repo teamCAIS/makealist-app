@@ -16,10 +16,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateOrdered: payload => dispatch(updateAddListOrdered(dispatch)),
-  updatePrivacy: payload => dispatch(updateAddListPrivacy(dispatch)),
+  updateOrdered: payload => dispatch(updateAddListOrdered(payload)),
+  updatePrivacy: payload => dispatch(updateAddListPrivacy(payload)),
   updateSelectedCategory: payload =>
-    dispatch(updateAddListSelectedCategory(dispatch)),
+    dispatch(updateAddListSelectedCategory(payload)),
 });
 
 const ListConfiguration = ({
@@ -31,7 +31,7 @@ const ListConfiguration = ({
   updateSelectedCategory,
 }) => {
   const categories = [
-    {label: 'Todas', value: 0},
+    {label: 'Nenhuma', value: 0},
     {label: 'Educação', value: 1},
     {label: 'Música', value: 2},
     {label: 'Cinema', value: 3},

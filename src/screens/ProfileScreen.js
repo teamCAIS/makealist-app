@@ -19,9 +19,9 @@ export default function ProfileScreen({navigation}) {
   const handleComponentToShow = () => {
     switch (activeComponent) {
       case 0:
-        return <MyLists />;
+        return <MyLists navigation={navigation} />;
       case 1:
-        return <Favorites />;
+        return <Favorites navigation={navigation} />;
       case 2:
         return <FriendshipRequests />;
     }

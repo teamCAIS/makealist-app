@@ -3,7 +3,7 @@ import {View, StyleSheet, FlatList} from 'react-native';
 import Card from '../Card';
 import {Caption} from 'react-native-paper';
 
-export default function MyLists() {
+export default function MyLists({navigation}) {
   const data = [
     {
       user: {
@@ -86,10 +86,14 @@ export default function MyLists() {
     <View style={styles.container}>
       {data.map((item, index) =>
         index !== data.length - 1 ? (
-          <Card key={`my-list-card-item${index}`} list={item} />
+          <Card
+            key={`my-list-card-item${index}`}
+            list={item}
+            navigation={navigation}
+          />
         ) : (
           <View key={`my-list-card-item${index}`}>
-            <Card list={item} />
+            <Card list={item} navigation={navigation} />
             <Caption style={styles.noMoreListsText}>
               Sem mais atualizações
             </Caption>
