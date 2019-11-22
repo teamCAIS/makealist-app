@@ -3,13 +3,15 @@ import {
   UPDATE_ADD_LIST_PRIVACY,
   UPDATE_ADD_LIST_SELECTED_CATEGORY,
   UPDATE_TRENDING_ORDER_BY,
+  UPDATE_PROFILE,
 } from '../constants/index';
-import {createStore} from 'redux';
 
 const initialState = {
-  name: 'Caio Nunes',
-  email: 'caionunes3000@gmail.com',
+  id: null,
+  name: '',
+  email: '',
   avatar_url: null,
+  bio: null,
   birthday: '1997/08/27',
   addListConfiguration: {
     ordered: true,
@@ -21,7 +23,7 @@ const initialState = {
   },
 };
 
-const reducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   if (typeof state === 'undefined') {
     return initialState;
   }
@@ -53,11 +55,19 @@ const reducer = (state = initialState, action) => {
           selectedCategory: action.payload,
         },
       });
+
+    case UPDATE_PROFILE:
+      return Object.assign({}, state, {
+        id: action.payload.id,
+        name: action.payload.name,
+        email: action.payload.email,
+        avatar_url: action.payload.photo,
+        birthday: action.payload.birth_day,
+        bio: action.payload.bio,
+      });
   }
 
   return state;
 };
-
-const userReducer = createStore(reducer);
 
 export default userReducer;

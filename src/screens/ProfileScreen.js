@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {Text, Caption, Divider, FAB} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -13,8 +14,15 @@ import MyLists from '../components/Profile/MyLists';
 import Favorites from '../components/Profile/Favorites';
 import FriendshipRequests from '../components/Profile/FriendshipRequests';
 
-export default function ProfileScreen({navigation}) {
+const mapStateToProps = state => ({
+  name: state.name,
+  email: state.email,
+});
+
+const Profile = ({navigation, name, email}) => {
   const [activeComponent, setActiveComponent] = useState(0);
+  const nameToUrl = name.replace(/\s/g, '');
+  const randomUrl = `https://api.adorable.io/avatars/285/${nameToUrl}.png`;
 
   const handleComponentToShow = () => {
     switch (activeComponent) {
@@ -46,11 +54,11 @@ export default function ProfileScreen({navigation}) {
                 <Image
                   style={styles.avatar}
                   source={{
-                    uri: 'https://api.adorable.io/avatars/285/caionunes.png',
+                    uri: randomUrl,
                   }}
                 />
               </TouchableOpacity>
-              <Text style={styles.username}>Caio Nunes</Text>
+              <Text style={styles.username}>{name}</Text>
             </View>
             <View>
               <TouchableOpacity onPress={() => handleLogout()}>
@@ -134,7 +142,10 @@ export default function ProfileScreen({navigation}) {
       ) : null}
     </View>
   );
-}
+};
+
+const ProfileScreen = connect(mapStateToProps)(Profile);
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {

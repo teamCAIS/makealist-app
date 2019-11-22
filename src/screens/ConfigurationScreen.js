@@ -1,21 +1,24 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Text, Title, Caption, Button, TextInput} from 'react-native-paper';
+import {connect} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function ConfigurationScreen() {
-  const user = {
-    name: 'Caio Nunes',
-    email: 'caionunes3000@gmail.com',
-    avatar_url: null,
-  };
+const mapStateToProps = state => ({
+  id: state.id,
+  username: state.name,
+  userEmail: state.email,
+});
 
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+const mapDispatchToProps = dispatch => ({});
+
+const Configuration = ({username, userEmail, id}) => {
+  const [name, setName] = useState(username);
+  const [email, setEmail] = useState(userEmail);
   const [image, setImage] = useState(null);
 
-  const nameToUrl = user.name.replace(/\s/g, '');
+  const nameToUrl = name.replace(/\s/g, '');
 
   const randomUrl = `https://api.adorable.io/avatars/285/${nameToUrl}.png`;
 
@@ -45,8 +48,8 @@ export default function ConfigurationScreen() {
             style={styles.picture}
           />
         </TouchableOpacity>
-        <Title>{user.name}</Title>
-        <Caption>{user.email}</Caption>
+        <Title>{name}</Title>
+        <Caption>{email}</Caption>
       </View>
       <TextInput
         label="Nome"
@@ -76,7 +79,13 @@ export default function ConfigurationScreen() {
       <Button mode="text">Apagar conta</Button>
     </View>
   );
-}
+};
+
+const ConfigurationScreen = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Configuration);
+export default ConfigurationScreen;
 
 const styles = StyleSheet.create({
   container: {

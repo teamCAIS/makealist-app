@@ -4,7 +4,10 @@ import {
   Provider as PaperProvider,
   configureFonts,
 } from 'react-native-paper';
+import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import ReduxPromise from 'redux-promise';
 import userReducer from './reducers/reducer';
 
 import Routes from './routes';
@@ -41,9 +44,11 @@ const theme = {
   fonts: configureFonts(fontConfig),
 };
 
+const store = createStore(userReducer, applyMiddleware(ReduxPromise, thunk));
+
 export default function App() {
   return (
-    <Provider store={userReducer}>
+    <Provider store={store}>
       <PaperProvider theme={theme}>
         <Routes />
       </PaperProvider>

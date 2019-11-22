@@ -4,40 +4,75 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Platform,
+  ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import moment from 'moment';
-import 'moment/locale/pt-br';
-import {Text, TextInput, Button} from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import {
+  Text,
+  TextInput,
+  Button,
+  Snackbar,
+  HelperText,
+  Checkbox,
+  Caption,
+} from 'react-native-paper';
+import {validate} from '../services/utils';
+import {userRegister} from '../actions/index';
+import {connect} from 'react-redux';
 
-export default function RegisterScreen() {
-  moment.locale('pt-br');
+const mapDispatchToProps = dispatch => ({
+  register: payload => dispatch(userRegister(payload)),
+});
+
+const Register = ({register}) => {
+  // moment.locale('pt-br');
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [birthday, setBirthDay] = useState(new Date('2005/01/01'));
-  const [show, setShow] = useState(false);
+  const [checked, setChecked] = useState(false);
 
-  const handleDate = (event, date) => {
-    date = date || birthday;
+  const [isEmailNotValid, setIsEmailNotValid] = useState(false);
+  const [isPasswordNotValid, setIsPasswordNotValid] = useState(false);
+  const [
+    isPasswordConfirmationNotValid,
+    setIsPasswordConfirmationNotValid,
+  ] = useState(false);
+  const [emailAlreadyExists, setEmailAlreadyExists] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
-    setShow(Platform.OS === 'ios' ? true : false);
-    setBirthDay(date);
-  };
+  const handleSubmit = async () => {
+    const validation = await validate(email, password, passwordConfirmation);
 
-  const open = () => {
-    setShow(true);
+    if (!validation.email) {
+      return setIsEmailNotValid(true);
+    } else if (!validation.password) {
+      return setIsPasswordNotValid(true);
+    } else if (!validation.passwordConfirmation) {
+      return setIsPasswordConfirmationNotValid(true);
+    }
+
+    let payload = {
+      name,
+      email: email.toLowerCase(),
+      password,
+    };
+
+    const result = await register(payload);
+
+    if (result !== true) {
+      return setEmailAlreadyExists(true);
+    }
+
+    return setRegistrationSuccess(true);
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={{flex: 1}}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={{color: '#757575', fontSize: 14}}>
           Precisamos de algumas informações para criarmos o seu perfil.
         </Text>
@@ -46,6 +81,7 @@ export default function RegisterScreen() {
           placeholder="Digite seu nome"
           placeholderTextColor="#ddd"
           value={name}
+          autoCompleteType="off"
           onChangeText={setName}
           style={{marginVertical: 8, backgroundColor: 'white'}}
           mode="flat"
@@ -55,10 +91,16 @@ export default function RegisterScreen() {
           placeholder="Digite seu email"
           placeholderTextColor="#ddd"
           value={email}
+          autoCompleteType="off"
+          keyboardType="email-address"
+          onFocus={() => setIsEmailNotValid(false)}
           onChangeText={setEmail}
           style={{marginVertical: 8, backgroundColor: 'white'}}
           mode="flat"
         />
+        <HelperText type="error" visible={isEmailNotValid}>
+          E-mail inválido!
+        </HelperText>
         <Text
           style={{
             color: '#757575',
@@ -72,61 +114,69 @@ export default function RegisterScreen() {
           placeholder="Digite sua senha"
           placeholderTextColor="#ddd"
           value={password}
+          secureTextEntry={!checked}
+          onFocus={() => setIsPasswordNotValid(false)}
           onChangeText={setPassword}
           style={{backgroundColor: 'white'}}
           mode="flat"
         />
+        {isPasswordNotValid && (
+          <HelperText type="error" visible={isPasswordNotValid}>
+            A senha deve conter 8 dígitos!
+          </HelperText>
+        )}
         <TextInput
           label="Confirmação de senha"
           placeholder="Repita a senha anterior"
           placeholderTextColor="#ddd"
           value={passwordConfirmation}
+          secureTextEntry={!checked}
+          onFocus={() => setIsPasswordConfirmationNotValid(false)}
           onChangeText={setPasswordConfirmation}
           style={{marginVertical: 8, backgroundColor: 'white'}}
           mode="flat"
         />
-        <Text
-          style={{
-            color: '#757575',
-            fontSize: 14,
-            marginVertical: 8,
-          }}>
-          Insira sua data de nascimento
-        </Text>
-        <TouchableOpacity
-          onPress={() => open()}
-          style={{
-            backgroundColor: 'white',
-            borderBottomColor: '#aaa',
-            borderBottomWidth: 1,
-            height: 60,
-            paddingHorizontal: 16,
-            justifyContent: 'center',
-          }}>
-          <Text style={{color: '#757575', fontSize: 16}}>
-            {moment(birthday).format('LL')}
-          </Text>
-        </TouchableOpacity>
-        {show && (
-          <DateTimePicker
-            value={birthday}
-            mode={'date'}
-            is24Hour={true}
-            display="default"
-            onChange={handleDate}
-            maximumDate={new Date('2005/01/01')}
-          />
+        {isPasswordConfirmationNotValid && (
+          <HelperText type="error" visible={isPasswordConfirmationNotValid}>
+            As senhas estão diferentes!
+          </HelperText>
         )}
+        <View style={styles.checkboxContainer}>
+          <Checkbox.Android
+            status={checked ? 'checked' : 'unchecked'}
+            onPress={() => setChecked(!checked)}
+            color="#512DA8"
+          />
+          <TouchableOpacity onPress={() => setChecked(!checked)}>
+            <Caption style={styles.checkboxText}>Mostrar a senha</Caption>
+          </TouchableOpacity>
+        </View>
+
+        <Snackbar
+          visible={emailAlreadyExists}
+          onDismiss={() => setEmailAlreadyExists(false)}>
+          Este email já está cadastrado!
+        </Snackbar>
+        <Snackbar
+          visible={registrationSuccess}
+          onDismiss={() => setRegistrationSuccess(false)}>
+          Cadastro realizado com sucesso! Você já pode logar na sua conta.
+        </Snackbar>
+
         <Button
           mode="contained"
+          onPress={() => handleSubmit()}
           labelStyle={{color: 'white'}}
           style={{marginTop: 16}}>
           Enviar
         </Button>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
-}
+};
+
+const RegisterScreen = connect(null, mapDispatchToProps)(Register);
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -134,5 +184,14 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 16,
     backgroundColor: '#f8f8f8',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  checkboxText: {
+    marginLeft: 4,
+    fontSize: 14,
   },
 });

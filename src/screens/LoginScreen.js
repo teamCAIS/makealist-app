@@ -14,29 +14,26 @@ import {
   Checkbox,
   Caption,
   HelperText,
+  Snackbar,
 } from 'react-native-paper';
+import {validate} from '../services/utils';
+import {connect} from 'react-redux';
+import {userLogin} from '../actions/index';
 
-import AsyncStorage from '@react-native-community/async-storage';
+const mapDispatchToProps = dispatch => ({
+  login: payload => dispatch(userLogin(payload)),
+});
 
-export default function LoginScreen({navigation}) {
+const Login = ({navigation, login}) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [emailDoesNotExist, setEmailDoesNotExist] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [checked, setChecked] = useState(false);
 
-  const validate = () => {
-    const EmailValidation = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const emailIsValid = EmailValidation.test(email);
-    const passwordIsValid = password.length > 8 ? true : false;
-    return {
-      email: emailIsValid,
-      password: passwordIsValid,
-    };
-  };
-
   const handleLogin = async () => {
-    const validation = await validate();
+    const validation = await validate(email, password);
 
     if (!validation.email) {
       return setEmailError(true);
@@ -45,11 +42,13 @@ export default function LoginScreen({navigation}) {
     }
 
     let payload = {
-      email,
+      email: email.toLowerCase(),
       password,
     };
 
-    await AsyncStorage.setItem('user', JSON.stringify(payload));
+    const result = await login(payload);
+
+    if (result !== true) return setEmailDoesNotExist(true);
 
     return navigation.navigate('App');
   };
@@ -117,10 +116,18 @@ export default function LoginScreen({navigation}) {
             <Caption>Desejo me cadastrar</Caption>
           </TouchableOpacity>
         </View>
+        <Snackbar
+          visible={emailDoesNotExist}
+          onDismiss={() => setEmailDoesNotExist(false)}>
+          Este email não está cadastrado
+        </Snackbar>
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
+
+const LoginScreen = connect(null, mapDispatchToProps)(Login);
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -16,8 +16,17 @@ import {
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
+import localization from 'moment/locale/pt-br';
 
 export default function Card({cardStyle, list, favorite, navigation}) {
+  moment.updateLocale('pt-br', localization);
+
+  const nameToUrl = list.user.name.replace(/\s/g, '');
+  const randomUrl = `https://api.adorable.io/avatars/285/${nameToUrl}.png`;
+
+  const listDate = moment(new Date()).diff(moment(new Date(list.date)), 'days');
+
   const [expanded, setExpanded] = useState(false);
   const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
   const [like, setLike] = useState(false);
@@ -25,8 +34,8 @@ export default function Card({cardStyle, list, favorite, navigation}) {
   const animatedHeight = expandAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      list.data.length > 2 ? 250 : 220,
-      list.data.length > 2 ? (list.data.length + 4) * 48 : 270,
+      list.items.length > 2 ? 250 : 220,
+      list.items.length > 2 ? (list.data.length + 4) * 48 : 270,
     ],
   });
 
@@ -71,12 +80,18 @@ export default function Card({cardStyle, list, favorite, navigation}) {
           <Avatar.Image
             size={24}
             source={{
-              uri: list.user.profile_photo,
+              uri: randomUrl,
             }}
           />
           <Paragraph style={styles.username}>{list.user.name}</Paragraph>
         </View>
-        <Caption style={styles.date}>{list.date}</Caption>
+        <Caption style={styles.date}>
+          {listDate == 0
+            ? 'Hoje'
+            : listDate == 1
+            ? 'Ontem'
+            : `Há ${listDate} dias`}
+        </Caption>
       </View>
       <Headline>{list.title}</Headline>
       <View style={{flexDirection: 'row'}}>
@@ -85,22 +100,22 @@ export default function Card({cardStyle, list, favorite, navigation}) {
           onPress={() => null}
           style={styles.chip}
           textStyle={styles.chipText}>
-          {list.category}
+          Nenhuma Categoria
         </Chip>
         <View />
       </View>
       <View>
-        {list.data.map((item, index) =>
+        {list.items.map((item, index) =>
           index > 0 ? (
             expanded ? (
               <Text key={index} numberOfLines={3} style={styles.text}>{`${
-                item.order !== null ? item.order + ' - ' : '• '
-              } ${item.description}`}</Text>
+                item.item_order ? item.item_order + ' - ' : '• '
+              } ${item.text}`}</Text>
             ) : null
           ) : (
             <Text key={index} numberOfLines={3} style={styles.text}>{`${
-              item.order !== null ? item.order + ' - ' : '• '
-            } ${item.description}`}</Text>
+              item.item_order ? item.item_order + ' - ' : '• '
+            } ${item.text}`}</Text>
           ),
         )}
       </View>
