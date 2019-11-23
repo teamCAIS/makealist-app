@@ -1,29 +1,72 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Caption, Paragraph} from 'react-native-paper';
+import {Caption, Paragraph, IconButton} from 'react-native-paper';
+import {connect} from 'react-redux';
+//dateHandler
+import moment from 'moment';
+import localization from 'moment/locale/pt-br';
 
-export default function CommentCard({data}) {
+const mapStateToProps = state => ({
+  user_id: state.id,
+});
+
+const CommentCardLayout = ({comment, user_id, deleteComment}) => {
+  moment.updateLocale('pt-br', localization);
+
+  const nameToUrl = comment.user.name.replace(/\s/g, '');
+  const randomUrl = `https://api.adorable.io/avatars/285/${nameToUrl}.png`;
+
+  const commentDate = moment(new Date()).diff(
+    moment(new Date(comment.comment_date)),
+    'days',
+  );
+
+  const handleDeleteComment = () => {
+    console.log(comment.id);
+    return deleteComment(comment.id);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerProfile}>
-          <Image source={{uri: data.avatar_url}} style={styles.avatar} />
-          <Paragraph style={styles.username}>{data.username}</Paragraph>
+          <Image source={{uri: randomUrl}} style={styles.avatar} />
+          <Paragraph style={styles.username}>{comment.user.name}</Paragraph>
         </TouchableOpacity>
-        <Caption>{data.date}</Caption>
+        {user_id === comment.id_user && (
+          <IconButton
+            icon="delete"
+            color="#212121"
+            size={20}
+            onPress={() => handleDeleteComment()}
+          />
+        )}
       </View>
       <View style={styles.body}>
-        <Paragraph>{data.comment}</Paragraph>
+        <Paragraph>{comment.comment_text}</Paragraph>
       </View>
+      <Caption style={{marginTop: 4}}>
+        {'Comentado '}
+        {commentDate == 0
+          ? 'hoje'
+          : commentDate == 1
+          ? 'ontem'
+          : `há ${commentDate} dias`}
+      </Caption>
     </View>
   );
-}
+};
+
+const CommentCard = connect(mapStateToProps)(CommentCardLayout);
+export default CommentCard;
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: '#FFF',
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
     elevation: 1,
     marginBottom: 8,
   },
@@ -33,6 +76,7 @@ const styles = StyleSheet.create({
   },
   headerProfile: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   avatar: {
     width: 24,
@@ -44,6 +88,8 @@ const styles = StyleSheet.create({
   },
   body: {
     marginTop: 16,
-    marginBottom: 8,
+    paddingBottom: 8,
+    borderBottomColor: '#aaa',
+    borderBottomWidth: 0.5,
   },
 });

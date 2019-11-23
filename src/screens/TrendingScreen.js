@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Headline} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MIcon from 'react-native-vector-icons/MaterialIcons';
 import Card from '../components/Card';
 
 export default function TrendingScreen({navigation}) {
@@ -17,21 +18,20 @@ export default function TrendingScreen({navigation}) {
     {
       user: {
         name: 'Jorjão Suave',
-        profile_photo: 'https://api.adorable.io/avatars/285/jorjaosuave.png',
       },
       title: 'Ideias inovadoras',
-      date: 'Ontem',
+      date: 'Sat, 23 Nov 2019 00:00:00 GMT',
       category: 'Inovação',
       likes: 5210,
-      comments: 8008,
-      data: [
+      comments: [],
+      items: [
         {
-          order: 1,
-          description: 'Volta do Sandy e Júnior',
+          item_order: 1,
+          text: 'Volta do Sandy e Júnior',
         },
         {
-          order: 2,
-          description: 'Aplicação para acabar a fome',
+          item_order: 2,
+          text: 'Aplicação para acabar a fome',
         },
       ],
     },
@@ -39,14 +39,18 @@ export default function TrendingScreen({navigation}) {
   return (
     <View>
       <View style={styles.header}>
-        <TextInput
-          placeholder="Digite sua pesquisa"
-          placeholderTextColor="#f1f1f1"
-          value={query}
-          onChangeText={setQuery}
-          style={styles.searchInput}
-          multiline={false}
-        />
+        <View style={styles.searchInputContainer}>
+          <MIcon name="search" size={24} color="#212121" />
+          <TextInput
+            placeholder="Digite sua pesquisa"
+            placeholderTextColor="#aaa"
+            value={query}
+            onChangeText={setQuery}
+            returnKeyType="search"
+            style={styles.searchInput}
+            multiline={false}
+          />
+        </View>
         <TouchableOpacity style={styles.headerMenu}>
           <Icon name="dots-vertical" size={32} color="white" />
         </TouchableOpacity>
@@ -124,13 +128,17 @@ const styles = StyleSheet.create({
   headerMenu: {
     marginLeft: 12,
   },
-  searchInput: {
+  searchInputContainer: {
     width: '90%',
-    backgroundColor: '#512D91',
-    borderBottomColor: 'white',
-    borderBottomWidth: 0.5,
-    color: 'white',
-    paddingLeft: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f1f1f1',
+    paddingHorizontal: 8,
+    borderRadius: 5,
+  },
+  searchInput: {
+    color: '#212121',
+    paddingLeft: 8,
   },
   newUsersContainer: {
     flexDirection: 'row',

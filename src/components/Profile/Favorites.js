@@ -11,30 +11,22 @@ export default function Favorites({navigation}) {
         profile_photo: 'https://api.adorable.io/avatars/285/Samuelitos3D.png',
       },
       title: 'Coisas que eu amo no 3D',
-      date: 'Há 5 dias',
+      date: 'Fri, 15 Nov 2019 00:00:00 GMT',
       category: '3D',
       likes: 29,
       comments: 10,
-      data: [
+      items: [
         {
-          order: 1,
-          description: 'O dinheiro que dá',
+          item_order: 1,
+          text: 'O dinheiro que dá',
         },
         {
-          order: 2,
-          description: 'Fazer uns lances maneiros',
+          item_order: 2,
+          text: 'Fazer uns lances maneiros',
         },
         {
-          order: 3,
-          description: 'Vou ser mt rico',
-        },
-        {
-          order: 4,
-          description: 'Acho que é so isso msm',
-        },
-        {
-          order: 5,
-          description: 'Flw',
+          item_order: 3,
+          text: 'Vou ser mt rico',
         },
       ],
     },
@@ -44,34 +36,22 @@ export default function Favorites({navigation}) {
         profile_photo: 'https://api.adorable.io/avatars/285/LecosLepos.png',
       },
       title: 'Fontes preferidas',
-      date: 'Há 7 dias',
+      date: 'Fri, 12 Nov 2019 00:00:00 GMT',
       category: 'Design',
       likes: 5,
       comments: 10,
-      data: [
+      items: [
         {
-          order: 1,
-          description: 'Monteserrat',
+          item_order: 1,
+          text: 'Monteserrat',
         },
         {
-          order: 2,
-          description: 'Raleway',
+          item_order: 2,
+          text: 'Raleway',
         },
         {
-          order: 3,
-          description: 'Roboto',
-        },
-        {
-          order: 4,
-          description: 'Arial',
-        },
-        {
-          order: 5,
-          description: 'Comic Sans',
-        },
-        {
-          order: 6,
-          description: 'Montserrat',
+          item_order: 3,
+          text: 'Roboto',
         },
       ],
     },

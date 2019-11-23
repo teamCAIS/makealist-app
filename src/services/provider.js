@@ -35,3 +35,34 @@ export async function getMyLists(id) {
   const result = await provider.get(`/list?user=${id}`);
   return result.data;
 }
+
+export async function getFeed(id) {
+  const result = await provider.get(`/feed?user=${id}`);
+  return result.data;
+}
+
+export async function createList(payload) {
+  const result = await provider.post('/list/', payload);
+  return result.data;
+}
+
+export async function createLike(payload) {
+  const result = await provider.post('/like/', payload);
+  return result.data;
+}
+
+export async function deleteLike(payload) {
+  const result = await provider.post('/deslike/', payload);
+  return result.data;
+}
+
+export async function createComment(payload) {
+  const result = await provider.post('/comment/', payload);
+  return result.data;
+}
+
+export async function deleteComment(id) {
+  const result = await provider.delete('/comment/', {data: {id: id}});
+  console.log(result);
+  return result.data;
+}

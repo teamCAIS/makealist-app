@@ -29,11 +29,12 @@ const Lists = ({navigation, id}) => {
             <Card
               key={`my-list-card-item${index}`}
               list={item}
+              user_id={id}
               navigation={navigation}
             />
           ) : (
             <View key={`my-list-card-item${index}`}>
-              <Card list={item} navigation={navigation} />
+              <Card list={item} navigation={navigation} user_id={id} />
               <Caption style={styles.noMoreListsText}>
                 Sem mais atualizações
               </Caption>

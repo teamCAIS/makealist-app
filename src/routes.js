@@ -118,7 +118,9 @@ const MainNavigation = createStackNavigator(
     },
     AddList: {
       screen: AddListNavigation,
-      navigationOptions: AddListScreen.navigationOptions,
+      navigationOptions: {
+        header: null
+      }
     },
     Comment: {
       screen: CommentScreen,

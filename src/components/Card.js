@@ -18,8 +18,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import localization from 'moment/locale/pt-br';
+import {createLike, deleteLike} from '../services/provider';
 
-export default function Card({cardStyle, list, favorite, navigation}) {
+export default function Card({cardStyle, list, user_id, favorite, navigation}) {
   moment.updateLocale('pt-br', localization);
 
   const nameToUrl = list.user.name.replace(/\s/g, '');
@@ -29,15 +30,18 @@ export default function Card({cardStyle, list, favorite, navigation}) {
 
   const [expanded, setExpanded] = useState(false);
   const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(list.liked);
+  const [likeNumber, setLikeNumber] = useState(list.likes);
   const [componentHeight, setComponentHeight] = useState(270);
   const animatedHeight = expandAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [
       list.items.length > 2 ? 250 : 220,
-      list.items.length > 2 ? (list.data.length + 4) * 48 : 270,
+      list.items.length > 2 ? (list.items.length + 4) * 48 : 270,
     ],
   });
+
+  useEffect(() => setLike(list.liked), [list]);
 
   const expandTransition = () => {
     Animated.spring(expandAnimation, {toValue: 1}).start();
@@ -56,12 +60,28 @@ export default function Card({cardStyle, list, favorite, navigation}) {
     setExpanded(!expanded);
   };
 
-  const handleLike = () => {
-    setLike(!like);
+  const handleLike = async () => {
+    let payload = {
+      id_user: user_id,
+      id_list: list.id,
+    };
+
+    if (like) {
+      await deleteLike(payload);
+      setLikeNumber(likeNumber - 1);
+      return setLike(false);
+    } else {
+      await createLike(payload);
+      setLikeNumber(likeNumber + 1);
+      return setLike(true);
+    }
   };
 
   const handleComment = () => {
-    return navigation.navigate('Comment');
+    return navigation.navigate('Comment', {
+      id_list: list.id,
+      comments: list.comments,
+    });
   };
 
   const handleFavorite = () => {
@@ -131,9 +151,9 @@ export default function Card({cardStyle, list, favorite, navigation}) {
                 color={like ? '#512DA8' : '#757575'}
               />
               <Caption style={styles.buttonNumber}>
-                {list.likes > 1000
-                  ? String(list.likes).substring(0, 1) + 'K'
-                  : list.likes}
+                {likeNumber > 1000
+                  ? String(likeNumber).substring(0, 1) + 'K'
+                  : likeNumber}
               </Caption>
             </TouchableOpacity>
             <TouchableOpacity
@@ -141,9 +161,9 @@ export default function Card({cardStyle, list, favorite, navigation}) {
               onPress={() => handleComment()}>
               <Icon name="comment-text" size={22} color="#777" />
               <Caption style={styles.buttonNumber}>
-                {list.comments > 1000
-                  ? String(list.comments).substring(0, 1) + 'K'
-                  : list.comments}
+                {list.comments.length > 1000
+                  ? String(list.comments.length).substring(0, 1) + 'K'
+                  : list.comments.length}
               </Caption>
             </TouchableOpacity>
             <TouchableOpacity
