@@ -17,9 +17,10 @@ import FriendshipRequests from '../components/Profile/FriendshipRequests';
 const mapStateToProps = state => ({
   name: state.name,
   email: state.email,
+  bio: state.bio,
 });
 
-const Profile = ({navigation, name, email}) => {
+const Profile = ({navigation, name, email, bio}) => {
   const [activeComponent, setActiveComponent] = useState(0);
   const nameToUrl = name.replace(/\s/g, '');
   const randomUrl = `https://api.adorable.io/avatars/285/${nameToUrl}.png`;
@@ -68,13 +69,30 @@ const Profile = ({navigation, name, email}) => {
             </View>
           </View>
           <Divider style={{backgroundColor: 'white'}} />
-          <Text style={styles.bio} numberOfLines={2}>
-            Aqui fica a minha bio, eu vou aceitar no máximo duas linhas pra não
-            virar festa.
+          <Text
+            style={[
+              styles.bio,
+              {
+                color:
+                  bio !== null
+                    ? bio.replace(/\s/g, '') === ''
+                      ? '#f1f1f1'
+                      : '#fff'
+                    : '#f1f1f1',
+              },
+            ]}
+            numberOfLines={2}>
+            {bio !== null
+              ? bio.replace(/\s/g, '') === ''
+                ? 'Insira sua bio nas configurações'
+                : bio
+              : 'Insira sua bio nas configurações'}
           </Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon name="calendar-star" size={18} color="#fff" />
-            <Text style={styles.birthday}>Nascimento 27 de agosto de 1997</Text>
+            <Text style={styles.birthday}>
+              Nascimento 01 de janeiro de 1990
+            </Text>
           </View>
           <View style={styles.tabContainer}>
             <TouchableOpacity
@@ -182,10 +200,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   bio: {
-    color: 'white',
     fontSize: 14,
     lineHeight: 18,
     marginVertical: 16,
+    minHeight: 35,
+    height: 35,
+    maxHeight: 35,
   },
   birthday: {
     color: '#fff',

@@ -12,7 +12,7 @@ const initialState = {
   email: '',
   avatar_url: null,
   bio: null,
-  birthday: '1997/08/27',
+  birthday: '1990/01/01',
   addListConfiguration: {
     ordered: true,
     privacy: false,

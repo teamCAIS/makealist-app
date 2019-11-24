@@ -7,7 +7,7 @@ import {
   UPDATE_TRENDING_ORDER_BY,
   UPDATE_ADD_LIST_SELECTED_CATEGORY,
 } from '../constants/index';
-import {login, register} from '../services/provider';
+import {login, register, updateUser} from '../services/provider';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const updateUserInfo = async payload => {
@@ -46,6 +46,17 @@ export const userRegister = payload => {
 
     if (result.error) return result;
 
+    return true;
+  };
+};
+
+export const userUpdate = payload => {
+  return async dispatch => {
+    const result = await updateUser(payload);
+
+    if (result.error) return result;
+
+    dispatch(updateUserInfo(result));
     return true;
   };
 };

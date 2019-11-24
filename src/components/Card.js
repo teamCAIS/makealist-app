@@ -13,6 +13,7 @@ import {
   Text,
   Avatar,
   Chip,
+  List,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -20,7 +21,14 @@ import moment from 'moment';
 import localization from 'moment/locale/pt-br';
 import {createLike, deleteLike} from '../services/provider';
 
-export default function Card({cardStyle, list, user_id, favorite, navigation}) {
+export default function Card({
+  cardStyle,
+  list,
+  liked,
+  user_id,
+  favorite,
+  navigation,
+}) {
   moment.updateLocale('pt-br', localization);
 
   const nameToUrl = list.user.name.replace(/\s/g, '');
@@ -29,32 +37,46 @@ export default function Card({cardStyle, list, user_id, favorite, navigation}) {
   const listDate = moment(new Date()).diff(moment(new Date(list.date)), 'days');
 
   const [expanded, setExpanded] = useState(false);
-  const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
-  const [like, setLike] = useState(list.liked);
+  // const [expandAnimation, setExpandAnimation] = useState(new Animated.Value(0));
+  const [like, setLike] = useState(liked);
   const [likeNumber, setLikeNumber] = useState(list.likes);
-  const [componentHeight, setComponentHeight] = useState(270);
-  const animatedHeight = expandAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [
-      list.items.length > 2 ? 250 : 220,
-      list.items.length > 2 ? (list.items.length + 4) * 48 : 270,
-    ],
-  });
+  // const [componentHeight, setComponentHeight] = useState(270);
+  // const animatedHeight = expandAnimation.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [
+  //     list.items.length > 2 ? 250 : 220,
+  //     list.items.length > 2 ? (list.items.length + 4) * 40 : 270,
+  //   ],
+  // });
 
-  useEffect(() => setLike(list.liked), [list]);
+  // const expandTransition = () => {
+  //   Animated.spring(expandAnimation, {
+  //     toValue: 1,
+  //     duration: 140,
+  //     bounciness: 0,
+  //     speed: 14,
+  //     easing: Easing.ease,
+  //     restSpeedThreshold: 100,
+  //     restDisplacementThreshold: 0,
+  //   }).start();
+  // };
 
-  const expandTransition = () => {
-    Animated.spring(expandAnimation, {toValue: 1}).start();
-  };
+  // const closeTransition = () => {
+  //   Animated.spring(expandAnimation, {
+  //     toValue: 0,
+  //     duration: 140,
+  //     bounciness: 0,
+  //     speed: 14,
+  //     easing: Easing.ease,
+  //     restSpeedThreshold: 100,
+  //     restDisplacementThreshold: 0,
+  //   }).start();
+  // };
 
-  const closeTransition = () => {
-    Animated.spring(expandAnimation, {toValue: 0}).start();
-  };
-
-  useEffect(() => {
-    if (!expanded) closeTransition();
-    else expandTransition();
-  }, [expanded]);
+  // useEffect(() => {
+  //   if (!expanded) closeTransition();
+  //   else expandTransition();
+  // }, [expanded]);
 
   const handlePress = () => {
     setExpanded(!expanded);
@@ -89,12 +111,7 @@ export default function Card({cardStyle, list, user_id, favorite, navigation}) {
   };
 
   return (
-    <Animated.View
-      onLayout={event => {
-        let {height} = event.nativeEvent.layout;
-        setComponentHeight(height);
-      }}
-      style={[styles.container, {height: animatedHeight}, cardStyle]}>
+    <View style={[styles.container, cardStyle]}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Avatar.Image
@@ -113,7 +130,17 @@ export default function Card({cardStyle, list, user_id, favorite, navigation}) {
             : `Há ${listDate} dias`}
         </Caption>
       </View>
-      <Headline>{list.title}</Headline>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingRight: 16,
+        }}>
+        <Headline style={{marginRight: list.private ? 8 : null, fontSize: 20}}>
+          {list.title}
+        </Headline>
+        {list.private && <Icon name="lock" size={24} color="#757575" />}
+      </View>
       <View style={{flexDirection: 'row'}}>
         <Chip
           icon={({size}) => <Icon name="label" size={size} color="#FFF" />}
@@ -125,19 +152,42 @@ export default function Card({cardStyle, list, user_id, favorite, navigation}) {
         <View />
       </View>
       <View>
-        {list.items.map((item, index) =>
+        {/* {list.items.map((item, index) =>
           index > 0 ? (
             expanded ? (
-              <Text key={index} numberOfLines={3} style={styles.text}>{`${
+              <Text key={index} style={styles.text}>{`${
                 item.item_order ? item.item_order + ' - ' : '• '
               } ${item.text}`}</Text>
             ) : null
           ) : (
-            <Text key={index} numberOfLines={3} style={styles.text}>{`${
+            <Text key={index} style={styles.text}>{`${
               item.item_order ? item.item_order + ' - ' : '• '
-            } ${item.text}`}</Text>
+            } ${
+              expanded ? item.text : `${item.text.substring(0, 30)}...`
+            }`}</Text>
           ),
-        )}
+        )} */}
+        <List.Section style={{marginBottom: 32}}>
+          <List.Accordion
+            title={`${
+              list.items[0].item_order ? `${list.items[0].item_order} - ` : '• '
+            }${list.items[0].text}`}
+            expanded={expanded}
+            onPress={() => handlePress()}
+            titleNumberOfLines={10}>
+            {list.items.map(
+              (item, index) =>
+                index > 0 && (
+                  <List.Item
+                    key={`list-item-${index}`}
+                    title={`${
+                      item.item_order ? `${item.item_order} - ` : '• '
+                    }${item.text}`}
+                  />
+                ),
+            )}
+          </List.Accordion>
+        </List.Section>
       </View>
       <View style={styles.actionButtonsContainer}>
         <View style={styles.buttonsBar}>
@@ -176,14 +226,14 @@ export default function Card({cardStyle, list, user_id, favorite, navigation}) {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             hitSlop={{top: 150, left: 150, bottom: 150, right: 150}}
             onPress={() => handlePress()}>
             <Ionicon name="ios-arrow-down" size={22} color="#777" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -250,6 +300,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     color: '#212121',
     fontSize: 16,
-    lineHeight: 40,
+    lineHeight: 24,
+    marginBottom: 4,
   },
 });

@@ -119,7 +119,7 @@ const Login = ({navigation, login}) => {
         <Snackbar
           visible={emailDoesNotExist}
           onDismiss={() => setEmailDoesNotExist(false)}>
-          Este email não está cadastrado
+          Email e/ou senha inválido(s)
         </Snackbar>
       </View>
     </KeyboardAvoidingView>

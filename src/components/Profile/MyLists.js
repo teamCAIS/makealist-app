@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
+import {withNavigationFocus} from 'react-navigation';
 import Card from '../Card';
 import {Caption} from 'react-native-paper';
 import {connect} from 'react-redux';
@@ -9,7 +10,7 @@ const mapStateToProps = state => ({
   id: state.id,
 });
 
-const Lists = ({navigation, id}) => {
+const Lists = ({navigation, id, isFocused}) => {
   const [data, setData] = useState([]);
 
   const getLists = async () => {
@@ -21,6 +22,14 @@ const Lists = ({navigation, id}) => {
     getLists();
   }, []);
 
+  if (!isFocused) {
+    if (data.length > 0) setData([]);
+  } else {
+    if (data.length === 0) {
+      getLists();
+    }
+  }
+
   return (
     <View style={styles.container}>
       {data.length > 0 ? (
@@ -29,12 +38,18 @@ const Lists = ({navigation, id}) => {
             <Card
               key={`my-list-card-item${index}`}
               list={item}
+              liked={item.liked}
               user_id={id}
               navigation={navigation}
             />
           ) : (
             <View key={`my-list-card-item${index}`}>
-              <Card list={item} navigation={navigation} user_id={id} />
+              <Card
+                list={item}
+                navigation={navigation}
+                user_id={id}
+                liked={item.liked}
+              />
               <Caption style={styles.noMoreListsText}>
                 Sem mais atualizações
               </Caption>
@@ -49,7 +64,7 @@ const Lists = ({navigation, id}) => {
 };
 
 const MyLists = connect(mapStateToProps)(Lists);
-export default MyLists;
+export default withNavigationFocus(MyLists);
 
 const styles = StyleSheet.create({
   noMoreListsText: {

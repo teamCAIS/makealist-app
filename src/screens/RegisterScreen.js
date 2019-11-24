@@ -98,9 +98,11 @@ const Register = ({register}) => {
           style={{marginVertical: 8, backgroundColor: 'white'}}
           mode="flat"
         />
-        <HelperText type="error" visible={isEmailNotValid}>
-          E-mail inválido!
-        </HelperText>
+        {isEmailNotValid && (
+          <HelperText type="error" visible={isEmailNotValid}>
+            E-mail inválido!
+          </HelperText>
+        )}
         <Text
           style={{
             color: '#757575',

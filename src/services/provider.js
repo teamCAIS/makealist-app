@@ -31,6 +31,16 @@ export async function register(payload) {
   return result.data;
 }
 
+export async function updateUser(payload) {
+  const result = await provider.put('/user/edit/', payload);
+
+  if (result.data.message) {
+    return {error: true, message: result.data.message};
+  }
+
+  return result.data;
+}
+
 export async function getMyLists(id) {
   const result = await provider.get(`/list?user=${id}`);
   return result.data;

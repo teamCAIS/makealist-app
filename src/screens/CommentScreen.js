@@ -38,8 +38,9 @@ const Comment = ({navigation, user_id, user_name}) => {
 
     const result = await createComment(payload);
 
-    if (result == 'Comentário adicionado') {
+    if (result.id) {
       commentsList.push({
+        id: result.id,
         comment_text: comment,
         comment_date: new Date(),
         id_user: user_id,
