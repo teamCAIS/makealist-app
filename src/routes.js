@@ -1,4 +1,5 @@
 import React from 'react';
+import 'react-native-gesture-handler';
 import {View} from 'react-native';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -68,21 +69,21 @@ const TabNavigation = createMaterialBottomTabNavigator(
         ),
       },
     },
-    Trending: {
-      screen: TrendingScreen,
-      navigationOptions: {
-        tabBarLabel: 'Em alta',
-        tabBarIcon: ({tintColor}) => (
-          <View>
-            <MaterialCommunityIcon
-              style={[{color: tintColor}]}
-              size={25}
-              name={tintColor === '#512DA8' ? 'compass' : 'compass-outline'}
-            />
-          </View>
-        ),
-      },
-    },
+    // Trending: {
+    //   screen: TrendingScreen,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Em alta',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <View>
+    //         <MaterialCommunityIcon
+    //           style={[{color: tintColor}]}
+    //           size={25}
+    //           name={tintColor === '#512DA8' ? 'compass' : 'compass-outline'}
+    //         />
+    //       </View>
+    //     ),
+    //   },
+    // },
     Configuration: {
       screen: ConfigurationScreen,
       navigationOptions: {
@@ -119,8 +120,8 @@ const MainNavigation = createStackNavigator(
     AddList: {
       screen: AddListNavigation,
       navigationOptions: {
-        header: null
-      }
+        header: null,
+      },
     },
     Comment: {
       screen: CommentScreen,

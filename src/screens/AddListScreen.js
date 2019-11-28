@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
   },
   buttonAdd: {
     marginTop: 16,
+    marginBottom: 88,
   },
   input: {
     paddingHorizontal: 16,

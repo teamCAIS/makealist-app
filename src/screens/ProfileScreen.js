@@ -95,7 +95,7 @@ const Profile = ({navigation, name, email, bio}) => {
             </Text>
           </View>
           <View style={styles.tabContainer}>
-            <TouchableOpacity
+            {/*<TouchableOpacity
               onPress={() => handleTabChange(0)}
               style={[
                 styles.tab,
@@ -112,7 +112,7 @@ const Profile = ({navigation, name, email, bio}) => {
                 Listas
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+             <TouchableOpacity
               onPress={() => handleTabChange(1)}
               style={[
                 styles.tab,
@@ -145,7 +145,7 @@ const Profile = ({navigation, name, email, bio}) => {
                 }>
                 Amigos
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <View>{handleComponentToShow()}</View>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   header: {
-    height: 270,
+    height: 250,
     backgroundColor: '#512DA8',
     justifyContent: 'center',
     paddingHorizontal: 16,
@@ -217,12 +217,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginTop: 16,
   },
   tab: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '33.333%',
+    width: '90%',
     height: 32,
   },
   activeTabText: {

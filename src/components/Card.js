@@ -216,7 +216,7 @@ export default function Card({
                   : list.comments.length}
               </Caption>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.button}
               onPress={() => handleFavorite()}>
               <Icon
@@ -224,7 +224,7 @@ export default function Card({
                 size={22}
                 color={favorite ? '#512DA8' : '#757575'}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           {/* <TouchableOpacity
             hitSlop={{top: 150, left: 150, bottom: 150, right: 150}}
